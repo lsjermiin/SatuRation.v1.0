@@ -20,7 +20,7 @@
  
  Date begun       : 18 April, 2018
  
- Date modified    : 18 August, 2019
+ Date modified    : 25 August, 2019
  
  Copyright        : Copyright © 2019 Lars Sommer Jermiin.
                     All rights reserved.
@@ -1483,15 +1483,15 @@ int main(int argc, char** argv){
     unsigned long varSites(0), total;
     unsigned long dm[max_array][max_array];            // 2D divergence matrix
     unsigned long row_sum[max_array], col_sum[max_array];
-    double d_obs(0), d_ran(0), d_cdf(0), df(0), lambda(0);
+    double d_obs(0), d_ran(0), d_cfs(0), df(0), lambda(0);
     double min_lambda(numeric_limits<double>::max());
     double max_lambda(-numeric_limits<double>::max());
-    double min_dcdf(numeric_limits<double>::max());
-    double max_dcdf(-numeric_limits<double>::max());
+    double min_dcfs(numeric_limits<double>::max());
+    double max_dcfs(-numeric_limits<double>::max());
     vector<int> sequence;
     vector<int> column;
     vector<double> row_of_double;
-    vector<vector<double> > mat_dobs, mat_lambda, mat_dcdf;
+    vector<vector<double> > mat_dobs, mat_lambda, mat_dcfs;
     string choice_of_sites, nature_of_data, brevity, characters;
     string inName, outName1, outName2, outName3, outName4, outName6, outName5, outName7;
     ofstream outfile1, outfile2, outfile3, outfile4, outfile5, outfile6, outfile7;
@@ -1564,8 +1564,8 @@ int main(int argc, char** argv){
             outName1 += inName[i];
         }
         outName7 = outName1 + "_sites_used.fst";
-        outName6 = outName1 + "_dcdf.dis";
-        outName5 = outName1 + "_dcdf.csv";
+        outName6 = outName1 + "_dcfs.dis";
+        outName5 = outName1 + "_dcfs.csv";
         outName4 = outName1 + "_lambda.csv";
         outName3 = outName1 + "_dobs.dis";
         outName2 = outName1 + "_dobs.csv";
@@ -1626,10 +1626,10 @@ int main(int argc, char** argv){
         mat_dobs.push_back(row_of_double);
     }
     mat_lambda = mat_dobs;
-    mat_dcdf = mat_dobs;
+    mat_dcfs = mat_dobs;
     if (toupper(brevity[0]) == 'F') {
         outfile1.open(outName1.c_str());
-        outfile1 << "Taxon 1,Taxon 2,dobs,dran,lambda,dcdf" << endl;
+        outfile1 << "Taxon 1,Taxon 2,dobs,dran,lambda,dcfs" << endl;
     }
     // Start the generation of results
     total = taxon.size() * (taxon.size() - 1)/2;
@@ -1698,24 +1698,27 @@ int main(int argc, char** argv){
             mat_lambda[iter2][iter1] = lambda;
 
             // Preparing to calculate compositional distance - full symmetry
-            d_cdf = 0.0;
+            d_cfs = 0.0;
             df = 0;
             for (size_t m = 0; m != rows_columns; ++m) {
                 for (size_t n = m+1; n != rows_columns; ++n) {
                     if (dm[m][n] + dm[n][m] > 0) {
                         ++df;
-                        d_cdf = d_cdf + ((long double)(SQR(dm[m][n] - dm[n][m])))/(dm[m][n] + dm[n][m]);
+                        d_cfs = d_cfs + ((long double)(SQR(dm[m][n] - dm[n][m])))/(dm[m][n] + dm[n][m]);
                     }
                 }
             }
-            d_cdf = sqrt(d_cdf/df);
-            mat_dcdf[iter1][iter2] = d_cdf;
-            mat_dcdf[iter2][iter1] = d_cdf;
-            if (d_cdf > max_dcdf) {
-                max_dcdf = d_cdf;
+            d_cfs = sqrt(d_cfs/df);
+            mat_dcfs[iter1][iter2] = d_cfs;
+            mat_dcfs[iter2][iter1] = d_cfs;
+            if (d_cfs > max_dcfs) {
+                max_dcfs = d_cfs;
             }
-            if (d_cdf < min_dcdf) {
-                min_dcdf = d_cdf;
+            if (d_cfs < min_dcfs) {
+                min_dcfs = d_cfs;
+            }
+            if (toupper(brevity[0]) == 'F') {
+                outfile1 << taxon[iter1] << "," << taxon[iter2] << "," << d_obs << "," << d_ran << "," << lambda << "," << d_cfs << endl;
             }
         }
     }
@@ -1751,8 +1754,8 @@ int main(int argc, char** argv){
                 outfile2 << "," << fixed << mat_dobs[i][j];
                 outfile3 << "\t" << fixed << mat_dobs[i][j];
                 outfile4 << "," << fixed << mat_lambda[i][j];
-                outfile5 << "," << fixed << mat_dcdf[i][j];
-                outfile6 << "\t" << fixed << mat_dcdf[i][j];
+                outfile5 << "," << fixed << mat_dcfs[i][j];
+                outfile6 << "\t" << fixed << mat_dcfs[i][j];
             }
             outfile2 << endl;
             outfile3 << endl;
@@ -1776,8 +1779,8 @@ int main(int argc, char** argv){
         cout << "   Matrix with estimates of d_obs ............. " << outName2 << endl;
         cout << "   Matrix with estimates of d_obs ............. " << outName3 << endl;
         cout << "   Matrix with estimates of lambda ............ " << outName4 << endl;
-        cout << "   Matrix with estimates of d_cdf ............. " << outName5 << endl;
-        cout << "   Matrix with estimates of d_cdf ............. " << outName6 << endl;
+        cout << "   Matrix with estimates of d_cfs ............. " << outName5 << endl;
+        cout << "   Matrix with estimates of d_cfs ............. " << outName6 << endl;
         cout << "   Alignment of sites used in this analysis ... " << outName7 << endl;
         cout << endl;
         if (min_lambda == numeric_limits<double>::max() || max_lambda == -numeric_limits<double>::max()) {
@@ -1787,8 +1790,8 @@ int main(int argc, char** argv){
             cout << "   Max(lambda) ................................ " << max_lambda << endl;
             cout << "   Range(lambda) .............................. " << max_lambda - min_lambda << endl;
         }
-        cout << "   Min(d_cdf) ............................... " << min_dcdf << endl;
-        cout << "   Max(d_cdf) ............................... " << max_dcdf << endl;
+        cout << "   Min(d_cfs) ................................. " << min_dcfs << endl;
+        cout << "   Max(d_cfs) ................................. " << max_dcfs << endl;
         cout << "   Constant sites included in the analysis .... ";
         if (toupper(choice_of_sites[0]) == 'V') {
             cout << "No" << endl;

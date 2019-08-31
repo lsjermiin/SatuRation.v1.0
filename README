@@ -17,7 +17,7 @@ ADDRESS     Australian National University
 CONTACT     lars.jermiin@anu.edu.au
             lars.jermiin@ucd.ie
 
-DATE        18 August 2019
+DATE        31 August 2019
 
 PURPOSE     SatuRation estimates the degree of satuation observed between two sequences 
             of nucleotides, genotypes, di-nucleotides, codons or amino acids.
