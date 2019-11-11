@@ -20,7 +20,7 @@
  
  Date begun       : 18 April, 2018
  
- Date modified    : 10 September, 2019
+ Date modified    : 10 November, 2019
  
  Copyright        : Copyright © 2019 Lars Sommer Jermiin.
                     All rights reserved.
@@ -747,7 +747,7 @@ std::vector<int> Translator(unsigned datatype, std::string seq) {
                 }
             }
             break;
-        case 31: // Dayhoff-6 (AGPST|DENQ|HKR|MIVL|WFY|C)
+        default: // Dayhoff-6 (AGPST|DENQ|HKR|MIVL|WFY|C)
             for (std::string::size_type i = 0; i != seq.size(); ++i) {
                 switch (toupper(seq[i])) {
                     case 'A': seq_data.push_back(0); break;
@@ -770,60 +770,6 @@ std::vector<int> Translator(unsigned datatype, std::string seq) {
                     case 'W': seq_data.push_back(4); break;
                     case 'Y': seq_data.push_back(4); break;
                     case 'C': seq_data.push_back(5); break;
-                    default : seq_data.push_back(6); break; // In case of other characters
-                }
-            }
-            break;
-        case 32: // Susko and Roger-6 (APST|DENG|QKR|MIVL|WC|FYH)
-            for (std::string::size_type i = 0; i != seq.size(); ++i) {
-                switch (toupper(seq[i])) {
-                    case 'A': seq_data.push_back(0); break;
-                    case 'P': seq_data.push_back(0); break;
-                    case 'S': seq_data.push_back(0); break;
-                    case 'T': seq_data.push_back(0); break;
-                    case 'D': seq_data.push_back(1); break;
-                    case 'E': seq_data.push_back(1); break;
-                    case 'N': seq_data.push_back(1); break;
-                    case 'G': seq_data.push_back(1); break;
-                    case 'Q': seq_data.push_back(2); break;
-                    case 'K': seq_data.push_back(2); break;
-                    case 'R': seq_data.push_back(2); break;
-                    case 'M': seq_data.push_back(3); break;
-                    case 'I': seq_data.push_back(3); break;
-                    case 'L': seq_data.push_back(3); break;
-                    case 'V': seq_data.push_back(3); break;
-                    case 'W': seq_data.push_back(4); break;
-                    case 'C': seq_data.push_back(4); break;
-                    case 'F': seq_data.push_back(5); break;
-                    case 'Y': seq_data.push_back(5); break;
-                    case 'H': seq_data.push_back(5); break;
-                    default : seq_data.push_back(6); break; // In case of other characters
-                }
-            }
-            break;
-        default: // Kosiol, Goldman, Buttimore-6 (AGPS|DENQHKRT|MIL|W|FY|CV)
-            for (std::string::size_type i = 0; i != seq.size(); ++i) {
-                switch (toupper(seq[i])) {
-                    case 'A': seq_data.push_back(0); break;
-                    case 'G': seq_data.push_back(0); break;
-                    case 'P': seq_data.push_back(0); break;
-                    case 'S': seq_data.push_back(0); break;
-                    case 'D': seq_data.push_back(1); break;
-                    case 'E': seq_data.push_back(1); break;
-                    case 'N': seq_data.push_back(1); break;
-                    case 'Q': seq_data.push_back(1); break;
-                    case 'H': seq_data.push_back(1); break;
-                    case 'K': seq_data.push_back(1); break;
-                    case 'R': seq_data.push_back(1); break;
-                    case 'T': seq_data.push_back(1); break;
-                    case 'M': seq_data.push_back(2); break;
-                    case 'I': seq_data.push_back(2); break;
-                    case 'L': seq_data.push_back(2); break;
-                    case 'W': seq_data.push_back(3); break;
-                    case 'F': seq_data.push_back(4); break;
-                    case 'Y': seq_data.push_back(4); break;
-                    case 'C': seq_data.push_back(5); break;
-                    case 'V': seq_data.push_back(5); break;
                     default : seq_data.push_back(6); break; // In case of other characters
                 }
             }
@@ -1380,38 +1326,6 @@ std::string Back_translator(unsigned datatype, std::vector<int> seq_data) {
                 }
             }
             break;
-        case 31:
-            for (std::vector<int>::size_type i = 0; i != seq_data.size(); ++i) {
-                if (sites[i] == '1') {
-                    number = seq_data[i];
-                    switch (number) {
-                        case  0: str.push_back('1'); break;
-                        case  1: str.push_back('2'); break;
-                        case  2: str.push_back('3'); break;
-                        case  3: str.push_back('4'); break;
-                        case  4: str.push_back('5'); break;
-                        case  5: str.push_back('6'); break;
-                        default: str.push_back('-'); break;
-                    }
-                }
-            }
-            break;
-        case 32:
-            for (std::vector<int>::size_type i = 0; i != seq_data.size(); ++i) {
-                if (sites[i] == '1') {
-                    number = seq_data[i];
-                    switch (number) {
-                        case  0: str.push_back('1'); break;
-                        case  1: str.push_back('2'); break;
-                        case  2: str.push_back('3'); break;
-                        case  3: str.push_back('4'); break;
-                        case  4: str.push_back('5'); break;
-                        case  5: str.push_back('6'); break;
-                        default: str.push_back('-'); break;
-                    }
-                }
-            }
-            break;
         default:
             for (std::vector<int>::size_type i = 0; i != seq_data.size(); ++i) {
                 if (sites[i] == '1') {
@@ -1437,14 +1351,21 @@ std::string Back_translator(unsigned datatype, std::vector<int> seq_data) {
 unsigned long Read_Input(std::string inname, unsigned datatype){
     unsigned long alignment_length(0);
     unsigned long counter(0);
-    std::string seq(""), str(""); // temporary string used to store input
+    std::string seq(""), str(""), tmp(""); // temporary string used to store input
     std::vector<int> sequence;    // temporary vector used to store input
     std::ifstream infile;
     
     infile.open(inname.c_str());
     while (getline(infile, str)) {
         if (!str.empty()) {
-            if (str[0] == '>') {
+            // remove blank space in string
+            tmp.clear();
+            for (std::string::size_type i = 0; i != str.size(); ++i) {
+                if (!isblank(str[i])) {
+                    tmp.push_back(str[i]);
+                }
+            }
+            if (tmp[0] == '>') {
                 if (seq.size() > 0) {
                     if (datatype > 14 && datatype < 18) {
                         if (seq.size() % 2 != 0) {
@@ -1465,12 +1386,12 @@ unsigned long Read_Input(std::string inname, unsigned datatype){
                     sequence.clear();
                     seq.clear();
                 }
-                str.erase(str.begin()); // removes first character from name
-                taxon.push_back(str); // stores sequence name in vector
-                str.clear();
+                tmp.erase(tmp.begin()); // removes first character from name
+                taxon.push_back(tmp); // stores sequence name in vector
             } else {
-                seq += str;
+                seq += tmp;
             }
+            str.clear();
         }
     }
     // Store last sequence in vector
@@ -1495,7 +1416,7 @@ unsigned long Read_Input(std::string inname, unsigned datatype){
         ++counter;
         sequence = *iter;
         if (sequence.size() != alignment_length) {
-            std::cerr << "\nERROR: sequences 1 and " << counter << " differ in length!\n" << std::endl;
+            std::cerr << "\nERROR: sequences 1 and " << counter + 1 << " differ in length!\n" << std::endl;
             exit(1);
         }
     }
@@ -1551,7 +1472,7 @@ int main(int argc, char** argv){
    
     if(argc != 5) {
         std::cerr << "\nSatuRation v1.0 Copyright 2019, Lars Jermiin" << std::endl;
-        std::cerr << "\nERROR -- use command: saturation <infile> <a|v> <b|f> <1|..|33>\n" << std::endl;
+        std::cerr << "\nERROR -- use command: saturation <infile> <a|v> <b|f> <1|..|31>\n" << std::endl;
         std::cerr << "  infile   Fasta-formatted alignment" << std::endl;
         std::cerr << "     a|v   All or variant sites" << std::endl;
         std::cerr << "     b|f   Brief or full report of results" << std::endl;
@@ -1586,8 +1507,6 @@ int main(int argc, char** argv){
         std::cerr << "      29   Genotypes; 14 states (A|C|G|T|K|M|R|Y|S|W|B|D|H|V)" << std::endl;
         std::cerr << "      30   Amino acids; 20 states (A|G|P|S|T|D|E|N|Q|H|K|R|M|I|V|L|W|F|Y|C)" << std::endl;
         std::cerr << "      31   Amino acids;  6 states (AGPST|DENQ|HKR|MIVL|WFY|C) [D6]" << std::endl;
-        std::cerr << "      32   Amino acids;  6 states (APST|DENG|QKR|MIVL|WC|FYH) [SR6]" << std::endl;
-        std::cerr << "      33   Amino acids;  6 states (AGPS|DENQHKRT|MIL|W|FY|CV) [KGB6]\n" << std::endl;
         std::cerr << std::endl;
         exit(1);
     }
@@ -1661,8 +1580,6 @@ int main(int argc, char** argv){
         case 28: alphabet = TEN; break;
         case 29: alphabet = FOURTEEN; break;
         case 30: alphabet = TWENTY; break;
-        case 31: alphabet = SIX; break;
-        case 32: alphabet = SIX; break;
         default: alphabet = SIX; break;
     }
     if (toupper(brevity[0]) == 'F') {
