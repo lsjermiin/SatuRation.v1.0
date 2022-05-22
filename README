@@ -4,7 +4,7 @@ NAME        SatuRation
 
 VERSION     1.0
 
-COPYRIGHT   Copyright © 2019 Lars Sommer Jermiin. All rights reserved.
+COPYRIGHT   Copyright © 2019-2022 Lars Sommer Jermiin. All rights reserved.
 
 WARNING     The copyright holder takes no legal responsibility for the correctness of 
             results obtained using this program.
@@ -17,7 +17,7 @@ ADDRESS     Australian National University
 CONTACT     lars.jermiin@anu.edu.au
             lars.jermiin@ucd.ie
 
-DATE        10 November 2019
+DATE        22 May 2022
 
 PURPOSE     SatuRation estimates the degree of satuation observed between two sequences 
             of nucleotides, genotypes, di-nucleotides, codons or amino acids.

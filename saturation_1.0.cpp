@@ -20,9 +20,9 @@
  
  Date begun       : 18 April, 2018
  
- Date modified    : 10 November, 2019
+ Date modified    : 10 May, 2022
  
- Copyright        : Copyright © 2019 Lars Sommer Jermiin.
+ Copyright        : Copyright © 2019-2022 Lars Sommer Jermiin.
                     All rights reserved.
  
  Responsibility   : The copyright holders take no legal responsibility for
@@ -1448,7 +1448,7 @@ void Identify_Variant_Sites(std::string choice_of_sites, unsigned states, unsign
 }
 
 
-//Main program that calls the various functions above
+// Main program that calls the various functions above
 int main(int argc, char** argv){
     unsigned alphabet(0);
     unsigned dataType(0);
@@ -1456,22 +1456,21 @@ int main(int argc, char** argv){
     unsigned long varSites(0), total;
     unsigned long dm[max_array][max_array];            // 2D divergence matrix
     unsigned long row_sum[max_array], col_sum[max_array];
-    double d_obs(0), d_ran(0), d_cfs(0), df(0), lambda(0);
+    double d_obs(0), d_ran(0), lambda(0);
     double min_lambda(std::numeric_limits<double>::max());
     double max_lambda(-std::numeric_limits<double>::max());
-    double min_dcfs(std::numeric_limits<double>::max());
-    double max_dcfs(-std::numeric_limits<double>::max());
     std::vector<int> sequence;
     std::vector<int> column;
     std::vector<double> row_of_double;
-    std::vector<std::vector<double> > mat_dobs, mat_lambda, mat_dcfs;
+    std::vector<std::vector<double> > mat_dobs, mat_lambda, mat_dB;
+    std::string name_1, name_2; // temporary variables holding names of two sequences
     std::string choice_of_sites, nature_of_data, brevity, characters;
-    std::string inName, outName1, outName2, outName3, outName4, outName6, outName5, outName7;
+    std::string inName, outName1, outName2, outName3, outName4, outName5;
     std::ifstream infile;
-    std::ofstream outfile1, outfile2, outfile3, outfile4, outfile5, outfile6, outfile7;
+    std::ofstream outfile1, outfile2, outfile3, outfile4, outfile5;
    
     if(argc != 5) {
-        std::cerr << "\nSatuRation v1.0 Copyright 2019, Lars Jermiin" << std::endl;
+        std::cerr << "\nSatuRation v1.0 Copyright 2019-22, Lars Jermiin" << std::endl;
         std::cerr << "\nERROR -- use command: saturation <infile> <a|v> <b|f> <1|..|31>\n" << std::endl;
         std::cerr << "  infile   Fasta-formatted alignment" << std::endl;
         std::cerr << "     a|v   All or variant sites" << std::endl;
@@ -1514,26 +1513,26 @@ int main(int argc, char** argv){
     choice_of_sites = argv[2];
     brevity = argv[3];
     nature_of_data = argv[4];
-    // check availability of input file
+    // Check availability of input file
     infile.open(inName.c_str());
     if (!infile) {
-        std::cerr << "\nERROR: file not found...\n" << std::endl;
+        std::cerr << "\nERROR: input file not found...\n" << std::endl;
         exit(1);
     }
-    // check choice of sites
+    // Check choice of sites
     if (toupper(choice_of_sites[0]) != 'A' && toupper(choice_of_sites[0]) != 'V') {
         std::cerr << "\nERROR: incorrect choice of sites: [a|v]\n" << std::endl;
         exit(1);
     }
-    // check choice of output
+    // Check choice of output
     if (toupper(brevity[0]) != 'F' && toupper(brevity[0]) != 'B') {
         std::cerr << "\nERROR: incorrect choice of output: [b|f]\n" << std::endl;
         exit(1);
     }
-    // check choice of data and alphabet
+    // Check choice of data and alphabet
     dataType = stoi(nature_of_data);
-    if (dataType < 1 || dataType > 33) {
-        std::cerr << "\nERROR: incorrect choice of data: [1|...|33]\n" << std::endl;
+    if (dataType < 1 || dataType > 31) {
+        std::cerr << "\nERROR: incorrect choice of data: [1|...|31]\n" << std::endl;
         exit(1);
     }
     if (toupper(brevity[0]) == 'F') {
@@ -1541,12 +1540,10 @@ int main(int argc, char** argv){
         for (std::string::size_type i = 0; i != inName.size() && inName[i] != '.'; ++i) {
             outName1 += inName[i];
         }
-        outName7 = outName1 + "_sites_used.fst";
-        outName6 = outName1 + "_dcfs.dis";
-        outName5 = outName1 + "_dcfs.csv";
+        outName5 = outName1 + "_sites_used.fst";
         outName4 = outName1 + "_lambda.csv";
-        outName3 = outName1 + "_dobs.dis";
-        outName2 = outName1 + "_dobs.csv";
+        outName3 = outName1 + "_d_obs.dis";
+        outName2 = outName1 + "_d_obs.csv";
         outName1 = outName1 + "_table.csv";
     }
     switch (dataType) {
@@ -1599,10 +1596,10 @@ int main(int argc, char** argv){
         mat_dobs.push_back(row_of_double);
     }
     mat_lambda = mat_dobs;
-    mat_dcfs = mat_dobs;
+    mat_dB = mat_dobs;
     if (toupper(brevity[0]) == 'F') {
         outfile1.open(outName1.c_str());
-        outfile1 << "Taxon 1,Taxon 2,dobs,dran,lambda,dcfs" << std::endl;
+        outfile1 << "Taxon 1,Taxon 2,d_obs,d_ran,lambda" << std::endl;
     }
     // Start the generation of results
     total = taxon.size() * (taxon.size() - 1)/2;
@@ -1666,36 +1663,23 @@ int main(int argc, char** argv){
             }
             if (lambda > max_lambda) {
                 max_lambda = lambda;
+                // Capture two numbers, pointing to the names of the relevant seequence pair
+                name_1 = taxon[iter1];
+                name_2 = taxon[iter2];
             }
             mat_lambda[iter1][iter2] = lambda;
             mat_lambda[iter2][iter1] = lambda;
 
-            // Preparing to calculate compositional distance - full symmetry
-            d_cfs = 0.0;
-            df = 0;
-            for (size_t m = 0; m != alphabet; ++m) {
-                for (size_t n = m+1; n != alphabet; ++n) {
-                    if (dm[m][n] + dm[n][m] > 0) {
-                        ++df;
-                        d_cfs = d_cfs + ((long double)(SQR(dm[m][n] - dm[n][m])))/(dm[m][n] + dm[n][m]);
-                    }
-                }
-            }
-            d_cfs = sqrt(d_cfs/df);
-            mat_dcfs[iter1][iter2] = d_cfs;
-            mat_dcfs[iter2][iter1] = d_cfs;
-            if (d_cfs > max_dcfs) {
-                max_dcfs = d_cfs;
-            }
-            if (d_cfs < min_dcfs) {
-                min_dcfs = d_cfs;
-            }
             if (toupper(brevity[0]) == 'F') {
-                outfile1 << taxon[iter1] << "," << taxon[iter2] << "," << d_obs << "," << d_ran << "," << lambda << "," << d_cfs << std::endl;
+                outfile1 << taxon[iter1] << ",";
+                outfile1 << taxon[iter2] << ",";
+                outfile1 << d_obs << ",";
+                outfile1 << d_ran << ",";
+                outfile1 << lambda << ",";
+                outfile1 << std::endl;
             }
         }
     }
-    std::cout << std::endl;
     if (toupper(brevity[0]) == 'F') {
         outfile1.close();
         // Printing tables to files
@@ -1706,75 +1690,59 @@ int main(int argc, char** argv){
         outfile4.open(outName4.c_str());
         outfile4 << taxon.size() << std::endl;
         outfile5.open(outName5.c_str());
-        outfile5 << taxon.size() << std::endl;
-        outfile6.open(outName6.c_str());
-        outfile6 << taxon.size() << std::endl;
-        outfile7.open(outName7.c_str());
         for (std::vector<std::vector<int> >::size_type i = 0; i != taxon.size(); i++) {
             outfile2 << taxon[i];
             outfile3 << std::left << std::setw(10) << taxon[i];
             outfile4 << taxon[i];
-            outfile5 << taxon[i];
-            outfile6 << std::left << std::setw(10) << taxon[i];
-            outfile7 << ">" << taxon[i] << std::endl;
+            outfile5 << ">" << taxon[i] << std::endl;
             sequence.clear();
             for (std::vector<std::vector<int> >::size_type j = 0; j != alignment_length; ++j) {
                 sequence.push_back(alignment[i][j]);
             }
             characters = Back_translator(dataType, sequence); // A|V sites
-            outfile7 << characters << std::endl;
+            outfile5 << characters << std::endl;
             for (std::vector<std::vector<int> >::size_type j = 0; j != taxon.size(); j++) {
                 outfile2 << "," << std::fixed << mat_dobs[i][j];
                 outfile3 << "\t" << std::fixed << mat_dobs[i][j];
                 outfile4 << "," << std::fixed << mat_lambda[i][j];
-                outfile5 << "," << std::fixed << mat_dcfs[i][j];
-                outfile6 << "\t" << std::fixed << mat_dcfs[i][j];
             }
             outfile2 << std::endl;
             outfile3 << std::endl;
             outfile4 << std::endl;
             outfile5 << std::endl;
-            outfile6 << std::endl;
-            outfile7 << std::endl;
         }
         outfile2.close();
         outfile3.close();
         outfile4.close();
         outfile5.close();
-        outfile6.close();
-        outfile7.close();
         std::cout << std::endl;
         std::cout << std::endl;
         std::cout << "--------------------------------------------------------------------" << std::endl;
         std::cout << "   RESULTS FROM ANALYSIS OF SATURATION COMPLETE" << std::endl;
         std::cout << std::endl;
-        std::cout << "   Table with all estimates ................... " << outName1 << std::endl;
-        std::cout << "   Matrix with estimates of d_obs ............. " << outName2 << std::endl;
-        std::cout << "   Matrix with estimates of d_obs ............. " << outName3 << std::endl;
-        std::cout << "   Matrix with estimates of lambda ............ " << outName4 << std::endl;
-        std::cout << "   Matrix with estimates of d_cfs ............. " << outName5 << std::endl;
-        std::cout << "   Matrix with estimates of d_cfs ............. " << outName6 << std::endl;
-        std::cout << "   Alignment of sites used in this analysis ... " << outName7 << std::endl;
+        std::cout << "   All estimates ............................. " << outName1 << std::endl;
+        std::cout << "   Estimates of d_obs ........................ " << outName2 << std::endl;
+        std::cout << "   Estimates of d_obs ........................ " << outName3 << std::endl;
+        std::cout << "   Estimates of lambda ....................... " << outName4 << std::endl;
+        std::cout << "   Alignment of sites used in this analysis .. " << outName5 << std::endl;
         std::cout << std::endl;
         if (min_lambda == std::numeric_limits<double>::max() || max_lambda == -std::numeric_limits<double>::max()) {
             std::cout << "   Unexpected value of lambda - check alignment" << std::endl;
         } else {
-            std::cout << "   Min(lambda) ................................ " << min_lambda << std::endl;
-            std::cout << "   Max(lambda) ................................ " << max_lambda << std::endl;
-            std::cout << "   Range(lambda) .............................. " << max_lambda - min_lambda << std::endl;
+            std::cout << "   Min(lambda) ............................... " << min_lambda << std::endl;
+            std::cout << "   Max(lambda) ............................... " << max_lambda << std::endl;
+            std::cout << "   Range(lambda) ............................. " << max_lambda - min_lambda << std::endl;
         }
-        std::cout << "   Min(d_cfs) ................................. " << min_dcfs << std::endl;
-        std::cout << "   Max(d_cfs) ................................. " << max_dcfs << std::endl;
-        std::cout << "   Constant sites included in the analysis .... ";
+        std::cout << "   Sites considered during this analysis ..... ";
         if (toupper(choice_of_sites[0]) == 'V') {
-            std::cout << "No" << std::endl;
+            std::cout << "VARIANT" << std::endl;
         } else {
-            std::cout << "Yes" << std::endl;
+            std::cout << "ALL" << std::endl;
         }
         std::cout << "--------------------------------------------------------------------" << std::endl;
         std::cout << std::endl;
     } else {
-        std::cout << "File, # taxa, Sites, #sites, min(lambda), max(lambda), range(lambda)" << std::endl;
+        std::cout << "File, #taxa, Sites, #sites, Min(lambda), Max(lambda), Pair (max(lambda))" << std::endl;
         for(std::string::size_type i = 0; i != sites.size(); ++i) {
             if(sites[i] == '1')
                 ++varSites;;
@@ -1789,7 +1757,8 @@ int main(int argc, char** argv){
         if (min_lambda == std::numeric_limits<double>::max() || max_lambda == -std::numeric_limits<double>::max()) {
             std::cout << "Nan,Nan,Nan,ODD RESULT - check alignment" << std::endl;
         } else {
-            std::cout << std::fixed << min_lambda << "," << std::fixed << max_lambda << "," << std::fixed << max_lambda - min_lambda << std::endl;
+            std::cout << std::fixed << min_lambda << "," << std::fixed << max_lambda << ",";
+            std::cout << name_1 << " vs " << name_2 << std::endl;
         }
     }
     return 0;
