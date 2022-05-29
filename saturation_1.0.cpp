@@ -20,7 +20,7 @@
  
  Date begun       : 18 April, 2018
  
- Date modified    : 10 May, 2022
+ Date modified    : 28 May, 2022
  
  Copyright        : Copyright © 2019-2022 Lars Sommer Jermiin.
                     All rights reserved.
@@ -1689,18 +1689,22 @@ int main(int argc, char** argv){
         outfile3 << taxon.size() << std::endl;
         outfile4.open(outName4.c_str());
         outfile4 << taxon.size() << std::endl;
-        outfile5.open(outName5.c_str());
+        if (toupper(choice_of_sites[0]) == 'V') {
+            outfile5.open(outName5.c_str());
+        }
         for (std::vector<std::vector<int> >::size_type i = 0; i != taxon.size(); i++) {
             outfile2 << taxon[i];
             outfile3 << std::left << std::setw(10) << taxon[i];
             outfile4 << taxon[i];
-            outfile5 << ">" << taxon[i] << std::endl;
-            sequence.clear();
-            for (std::vector<std::vector<int> >::size_type j = 0; j != alignment_length; ++j) {
-                sequence.push_back(alignment[i][j]);
+            if (toupper(choice_of_sites[0]) == 'V') {
+                outfile5 << ">" << taxon[i] << std::endl;
+                sequence.clear();
+                for (std::vector<std::vector<int> >::size_type j = 0; j != alignment_length; ++j) {
+                    sequence.push_back(alignment[i][j]);
+                }
+                characters = Back_translator(dataType, sequence); // A|V sites
+                outfile5 << characters << std::endl;
             }
-            characters = Back_translator(dataType, sequence); // A|V sites
-            outfile5 << characters << std::endl;
             for (std::vector<std::vector<int> >::size_type j = 0; j != taxon.size(); j++) {
                 outfile2 << "," << std::fixed << mat_dobs[i][j];
                 outfile3 << "\t" << std::fixed << mat_dobs[i][j];
@@ -1709,12 +1713,16 @@ int main(int argc, char** argv){
             outfile2 << std::endl;
             outfile3 << std::endl;
             outfile4 << std::endl;
-            outfile5 << std::endl;
+            if (toupper(choice_of_sites[0]) == 'V') {
+                outfile5 << std::endl;
+            }
         }
         outfile2.close();
         outfile3.close();
         outfile4.close();
-        outfile5.close();
+        if (toupper(choice_of_sites[0]) == 'V') {
+            outfile5.close();
+        }
         std::cout << std::endl;
         std::cout << std::endl;
         std::cout << "--------------------------------------------------------------------" << std::endl;
@@ -1724,7 +1732,9 @@ int main(int argc, char** argv){
         std::cout << "   Estimates of d_obs ........................ " << outName2 << std::endl;
         std::cout << "   Estimates of d_obs ........................ " << outName3 << std::endl;
         std::cout << "   Estimates of lambda ....................... " << outName4 << std::endl;
-        std::cout << "   Alignment of sites used in this analysis .. " << outName5 << std::endl;
+        if (toupper(choice_of_sites[0]) == 'V') {
+            std::cout << "   Alignment of sites used in this analysis .. " << outName5 << std::endl;
+        }
         std::cout << std::endl;
         if (min_lambda == std::numeric_limits<double>::max() || max_lambda == -std::numeric_limits<double>::max()) {
             std::cout << "   Unexpected value of lambda - check alignment" << std::endl;
@@ -1749,7 +1759,7 @@ int main(int argc, char** argv){
         }
         std::cout << inName << "," << taxon.size() << ",";
         if (toupper(choice_of_sites[0]) == 'V') {
-            std::cout << "Var,";
+            std::cout << "VARIANT,";
         } else {
             std::cout << "All,";
         }
