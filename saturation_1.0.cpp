@@ -1675,7 +1675,7 @@ int main(int argc, char** argv){
                 outfile1 << taxon[iter2] << ",";
                 outfile1 << d_obs << ",";
                 outfile1 << d_ran << ",";
-                outfile1 << lambda << ",";
+                outfile1 << lambda;
                 outfile1 << std::endl;
             }
         }
