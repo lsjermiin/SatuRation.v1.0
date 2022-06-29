@@ -20,7 +20,7 @@
  
  Date begun       : 18 April, 2018
  
- Date modified    : 28 May, 2022
+ Date modified    : 29 June, 2022
  
  Copyright        : Copyright © 2019-2022 Lars Sommer Jermiin.
                     All rights reserved.
@@ -37,7 +37,7 @@
                     program.
 
  Data types       : Sequences can be read a strings of one, two, or three
-                    nucleotides, strings of 10- or 14-state genotypes, or 
+                    nucleotides, strings of 10- or 14-state genotypes, or
                     as strings of amino acids.
 
  Nucleotides______
@@ -82,7 +82,7 @@
                     that character in some of the sequences is replaced by
                     an alignment gap (i.e., '-').
  
- Manuscript       : Jermiin et al. (2019)
+ Manuscript       : Jermiin LS, Misof B (2022). 
  
                     Zhang...
  
@@ -102,17 +102,17 @@
 
 // The following variables are declared externally because they
 // are needed in different functions
-const unsigned TWO(2);          // for 2-state alphabet (recoded DNA)
-const unsigned THREE(3);        // for 3-state alphabet (recoded DNA)
-const unsigned FOUR(4);         // for 4-state alphabet (DNA)
-const unsigned SIX(6);          // for 6-state alphabet (recoded amino acids)
-const unsigned TEN(10);         // for 10-state alphabet (genotype data)
-const unsigned FOURTEEN(14);    // for 14-state alphabet (genotype data)
-const unsigned SIXTEEN(16);     // for 16-state alphabet (subset of codons)
-const unsigned TWENTY(20);      // for 20-state alphabet (amino acids)
-const unsigned SIXTYFOUR(64);   // for 64-state alphabet (codons)
-const unsigned max_array(65);   // corresponding to amino acids & gaps
-std::string sites;                  // string controlling whether a site is used or not
+const unsigned TWO(2);                    // for 2-state alphabet (recoded DNA)
+const unsigned THREE(3);                  // for 3-state alphabet (recoded DNA)
+const unsigned FOUR(4);                   // for 4-state alphabet (DNA)
+const unsigned SIX(6);                    // for 6-state alphabet (recoded amino acids)
+const unsigned TEN(10);                   // for 10-state alphabet (genotype data)
+const unsigned FOURTEEN(14);              // for 14-state alphabet (genotype data)
+const unsigned SIXTEEN(16);               // for 16-state alphabet (subset of codons)
+const unsigned TWENTY(20);                // for 20-state alphabet (amino acids)
+const unsigned SIXTYFOUR(64);             // for 64-state alphabet (codons)
+const unsigned max_array(65);             // corresponding to amino acids & gaps
+std::string sites;                        // string controlling whether a site is used or not
 std::vector<std::string> taxon;           // 2D container for sequence names
 std::vector<std::vector<int> > alignment; // 2D container for sequence data
 
@@ -324,10 +324,10 @@ std::vector<int> Translator(unsigned datatype, std::string seq) {
                 unit = stoi(duplet);
                 duplet.clear();
                 switch (unit) {
-                    case 00: seq_data.push_back(0);  break; // AA
-                    case 01: seq_data.push_back(1);  break; // AC
-                    case 02: seq_data.push_back(2);  break; // AG
-                    case 03: seq_data.push_back(3);  break; // AT
+                    case  0: seq_data.push_back(0);  break; // AA
+                    case  1: seq_data.push_back(1);  break; // AC
+                    case  2: seq_data.push_back(2);  break; // AG
+                    case  3: seq_data.push_back(3);  break; // AT
                     case 10: seq_data.push_back(4);  break; // CA
                     case 11: seq_data.push_back(5);  break; // CC
                     case 12: seq_data.push_back(6);  break; // CG
@@ -381,22 +381,22 @@ std::vector<int> Translator(unsigned datatype, std::string seq) {
                 unit = stoi(triplet);
                 triplet.clear();
                 switch (unit) {
-                    case 000: seq_data.push_back(0);  break; // AAA
-                    case 001: seq_data.push_back(1);  break; // AAC
-                    case 002: seq_data.push_back(2);  break; // AAG
-                    case 003: seq_data.push_back(3);  break; // AAT
-                    case 010: seq_data.push_back(4);  break; // ACA
-                    case 011: seq_data.push_back(5);  break; // ACC
-                    case 012: seq_data.push_back(6);  break; // ACG
-                    case 013: seq_data.push_back(7);  break; // ACT
-                    case 020: seq_data.push_back(8);  break; // AGA
-                    case 021: seq_data.push_back(9);  break; // AGC
-                    case 022: seq_data.push_back(10); break; // AGG
-                    case 023: seq_data.push_back(11); break; // AGT
-                    case 030: seq_data.push_back(12); break; // ATA
-                    case 031: seq_data.push_back(13); break; // ATC
-                    case 032: seq_data.push_back(14); break; // ATG
-                    case 033: seq_data.push_back(15); break; // ATT
+                    case   0: seq_data.push_back(0);  break; // AAA
+                    case   1: seq_data.push_back(1);  break; // AAC
+                    case   2: seq_data.push_back(2);  break; // AAG
+                    case   3: seq_data.push_back(3);  break; // AAT
+                    case  10: seq_data.push_back(4);  break; // ACA
+                    case  11: seq_data.push_back(5);  break; // ACC
+                    case  12: seq_data.push_back(6);  break; // ACG
+                    case  13: seq_data.push_back(7);  break; // ACT
+                    case  20: seq_data.push_back(8);  break; // AGA
+                    case  21: seq_data.push_back(9);  break; // AGC
+                    case  22: seq_data.push_back(10); break; // AGG
+                    case  23: seq_data.push_back(11); break; // AGT
+                    case  30: seq_data.push_back(12); break; // ATA
+                    case  31: seq_data.push_back(13); break; // ATC
+                    case  32: seq_data.push_back(14); break; // ATG
+                    case  33: seq_data.push_back(15); break; // ATT
                     case 100: seq_data.push_back(16); break; // CAA
                     case 101: seq_data.push_back(17); break; // CAC
                     case 102: seq_data.push_back(18); break; // CAG
@@ -465,10 +465,10 @@ std::vector<int> Translator(unsigned datatype, std::string seq) {
                 unit = stoi(triplet);
                 triplet.clear();
                 switch (unit) {
-                    case 00: seq_data.push_back(0);  break; // AA
-                    case 01: seq_data.push_back(1);  break; // AC
-                    case 02: seq_data.push_back(2);  break; // AG
-                    case 03: seq_data.push_back(3);  break; // AT
+                    case  0: seq_data.push_back(0);  break; // AA
+                    case  1: seq_data.push_back(1);  break; // AC
+                    case  2: seq_data.push_back(2);  break; // AG
+                    case  3: seq_data.push_back(3);  break; // AT
                     case 10: seq_data.push_back(4);  break; // CA
                     case 11: seq_data.push_back(5);  break; // CC
                     case 12: seq_data.push_back(6);  break; // CG
@@ -501,10 +501,10 @@ std::vector<int> Translator(unsigned datatype, std::string seq) {
                 unit = stoi(triplet);
                 triplet.clear();
                 switch (unit) {
-                    case 00: seq_data.push_back(0);  break; // AA
-                    case 01: seq_data.push_back(1);  break; // AC
-                    case 02: seq_data.push_back(2);  break; // AG
-                    case 03: seq_data.push_back(3);  break; // AT
+                    case  0: seq_data.push_back(0);  break; // AA
+                    case  1: seq_data.push_back(1);  break; // AC
+                    case  2: seq_data.push_back(2);  break; // AG
+                    case  3: seq_data.push_back(3);  break; // AT
                     case 10: seq_data.push_back(4);  break; // CA
                     case 11: seq_data.push_back(5);  break; // CC
                     case 12: seq_data.push_back(6);  break; // CG
@@ -537,10 +537,10 @@ std::vector<int> Translator(unsigned datatype, std::string seq) {
                 unit = stoi(triplet);
                 triplet.clear();
                 switch (unit) {
-                    case 00: seq_data.push_back(0);  break; // AA
-                    case 01: seq_data.push_back(1);  break; // AC
-                    case 02: seq_data.push_back(2);  break; // AG
-                    case 03: seq_data.push_back(3);  break; // AT
+                    case  0: seq_data.push_back(0);  break; // AA
+                    case  1: seq_data.push_back(1);  break; // AC
+                    case  2: seq_data.push_back(2);  break; // AG
+                    case  3: seq_data.push_back(3);  break; // AT
                     case 10: seq_data.push_back(4);  break; // CA
                     case 11: seq_data.push_back(5);  break; // CC
                     case 12: seq_data.push_back(6);  break; // CG
@@ -966,22 +966,22 @@ std::string Back_translator(unsigned datatype, std::vector<int> seq_data) {
                 if (sites[i] == '1') {
                     number = seq_data[i];
                     switch (number) {
-                        case 00: str = str + "AA"; break;
-                        case 01: str = str + "AC"; break;
-                        case 02: str = str + "AG"; break;
-                        case 03: str = str + "AT"; break;
-                        case 10: str = str + "CA"; break;
-                        case 11: str = str + "CC"; break;
-                        case 12: str = str + "CG"; break;
-                        case 13: str = str + "CT"; break;
-                        case 20: str = str + "GA"; break;
-                        case 21: str = str + "GC"; break;
-                        case 22: str = str + "GG"; break;
-                        case 23: str = str + "GT"; break;
-                        case 30: str = str + "TA"; break;
-                        case 31: str = str + "TC"; break;
-                        case 32: str = str + "TG"; break;
-                        case 33: str = str + "TT"; break;
+                        case  0: str = str + "AA"; break;
+                        case  1: str = str + "AC"; break;
+                        case  2: str = str + "AG"; break;
+                        case  3: str = str + "AT"; break;
+                        case  4: str = str + "CA"; break;
+                        case  5: str = str + "CC"; break;
+                        case  6: str = str + "CG"; break;
+                        case  7: str = str + "CT"; break;
+                        case  8: str = str + "GA"; break;
+                        case  9: str = str + "GC"; break;
+                        case 10: str = str + "GG"; break;
+                        case 11: str = str + "GT"; break;
+                        case 12: str = str + "TA"; break;
+                        case 13: str = str + "TC"; break;
+                        case 14: str = str + "TG"; break;
+                        case 15: str = str + "TT"; break;
                         default: str = str + "--"; break;
                     }
                 }
@@ -990,6 +990,7 @@ std::string Back_translator(unsigned datatype, std::vector<int> seq_data) {
         case 16:
             for (std::vector<int>::size_type i = 0; i != seq_data.size(); ++i) {
                 if (sites[i] == '1') {
+                    number = seq_data[i];
                     switch (number) {
                         case 0:  str.push_back('A'); break;
                         case 1:  str.push_back('C'); break;
@@ -998,7 +999,6 @@ std::string Back_translator(unsigned datatype, std::vector<int> seq_data) {
                         default: str.push_back('-'); break;
                     }
                 }
-                number = seq_data[i];
             }
             break;
         case 17:
@@ -1021,71 +1021,71 @@ std::string Back_translator(unsigned datatype, std::vector<int> seq_data) {
                 if (sites[i] == '1') {
                     number = seq_data[i];
                     switch (number) {
-                        case 000: str = str + "AAA"; break;
-                        case 001: str = str + "AAC"; break;
-                        case 002: str = str + "AAG"; break;
-                        case 003: str = str + "AAT"; break;
-                        case 010: str = str + "ACA"; break;
-                        case 011: str = str + "ACC"; break;
-                        case 012: str = str + "ACG"; break;
-                        case 013: str = str + "ACT"; break;
-                        case 020: str = str + "AGA"; break;
-                        case 021: str = str + "AGC"; break;
-                        case 022: str = str + "AGG"; break;
-                        case 023: str = str + "AGT"; break;
-                        case 030: str = str + "ATA"; break;
-                        case 031: str = str + "ATC"; break;
-                        case 032: str = str + "ATG"; break;
-                        case 033: str = str + "ATT"; break;
-                        case 100: str = str + "CAA"; break;
-                        case 101: str = str + "CAC"; break;
-                        case 102: str = str + "CAG"; break;
-                        case 103: str = str + "CAT"; break;
-                        case 110: str = str + "CCA"; break;
-                        case 111: str = str + "CCC"; break;
-                        case 112: str = str + "CCG"; break;
-                        case 113: str = str + "CCT"; break;
-                        case 120: str = str + "CGA"; break;
-                        case 121: str = str + "CGC"; break;
-                        case 122: str = str + "CGG"; break;
-                        case 123: str = str + "CGT"; break;
-                        case 130: str = str + "CTA"; break;
-                        case 131: str = str + "CTC"; break;
-                        case 132: str = str + "CTG"; break;
-                        case 133: str = str + "CTT"; break;
-                        case 200: str = str + "GAA"; break;
-                        case 201: str = str + "GAC"; break;
-                        case 202: str = str + "GAG"; break;
-                        case 203: str = str + "GAT"; break;
-                        case 210: str = str + "GCA"; break;
-                        case 211: str = str + "GCC"; break;
-                        case 212: str = str + "GCG"; break;
-                        case 213: str = str + "GCT"; break;
-                        case 220: str = str + "GGA"; break;
-                        case 221: str = str + "GGC"; break;
-                        case 222: str = str + "GGG"; break;
-                        case 223: str = str + "GGT"; break;
-                        case 230: str = str + "GTA"; break;
-                        case 231: str = str + "GTC"; break;
-                        case 232: str = str + "GTG"; break;
-                        case 233: str = str + "GTT"; break;
-                        case 300: str = str + "TAA"; break;
-                        case 301: str = str + "TAC"; break;
-                        case 302: str = str + "TAG"; break;
-                        case 303: str = str + "TAT"; break;
-                        case 310: str = str + "TCA"; break;
-                        case 311: str = str + "TCC"; break;
-                        case 312: str = str + "TCG"; break;
-                        case 313: str = str + "TCT"; break;
-                        case 320: str = str + "TGA"; break;
-                        case 321: str = str + "TGC"; break;
-                        case 322: str = str + "TGG"; break;
-                        case 323: str = str + "TGT"; break;
-                        case 330: str = str + "TTA"; break;
-                        case 331: str = str + "TTC"; break;
-                        case 332: str = str + "TTG"; break;
-                        case 333: str = str + "TTT"; break;
-                        default:  str = str + "---"; break;
+                        case  0: str = str + "AAA"; break;
+                        case  1: str = str + "AAC"; break;
+                        case  2: str = str + "AAG"; break;
+                        case  3: str = str + "AAT"; break;
+                        case  4: str = str + "ACA"; break;
+                        case  5: str = str + "ACC"; break;
+                        case  6: str = str + "ACG"; break;
+                        case  7: str = str + "ACT"; break;
+                        case  8: str = str + "AGA"; break;
+                        case  9: str = str + "AGC"; break;
+                        case 10: str = str + "AGG"; break;
+                        case 11: str = str + "AGT"; break;
+                        case 12: str = str + "ATA"; break;
+                        case 13: str = str + "ATC"; break;
+                        case 14: str = str + "ATG"; break;
+                        case 15: str = str + "ATT"; break;
+                        case 16: str = str + "CAA"; break;
+                        case 17: str = str + "CAC"; break;
+                        case 18: str = str + "CAG"; break;
+                        case 19: str = str + "CAT"; break;
+                        case 20: str = str + "CCA"; break;
+                        case 21: str = str + "CCC"; break;
+                        case 22: str = str + "CCG"; break;
+                        case 23: str = str + "CCT"; break;
+                        case 24: str = str + "CGA"; break;
+                        case 25: str = str + "CGC"; break;
+                        case 26: str = str + "CGG"; break;
+                        case 27: str = str + "CGT"; break;
+                        case 28: str = str + "CTA"; break;
+                        case 29: str = str + "CTC"; break;
+                        case 30: str = str + "CTG"; break;
+                        case 31: str = str + "CTT"; break;
+                        case 32: str = str + "GAA"; break;
+                        case 33: str = str + "GAC"; break;
+                        case 34: str = str + "GAG"; break;
+                        case 35: str = str + "GAT"; break;
+                        case 36: str = str + "GCA"; break;
+                        case 37: str = str + "GCC"; break;
+                        case 38: str = str + "GCG"; break;
+                        case 39: str = str + "GCT"; break;
+                        case 40: str = str + "GGA"; break;
+                        case 41: str = str + "GGC"; break;
+                        case 42: str = str + "GGG"; break;
+                        case 43: str = str + "GGT"; break;
+                        case 44: str = str + "GTA"; break;
+                        case 45: str = str + "GTC"; break;
+                        case 46: str = str + "GTG"; break;
+                        case 47: str = str + "GTT"; break;
+                        case 48: str = str + "TAA"; break;
+                        case 49: str = str + "TAC"; break;
+                        case 50: str = str + "TAG"; break;
+                        case 51: str = str + "TAT"; break;
+                        case 52: str = str + "TCA"; break;
+                        case 53: str = str + "TCC"; break;
+                        case 54: str = str + "TCG"; break;
+                        case 55: str = str + "TCT"; break;
+                        case 56: str = str + "TGA"; break;
+                        case 57: str = str + "TGC"; break;
+                        case 58: str = str + "TGG"; break;
+                        case 59: str = str + "TGT"; break;
+                        case 60: str = str + "TTA"; break;
+                        case 61: str = str + "TTC"; break;
+                        case 62: str = str + "TTG"; break;
+                        case 63: str = str + "TTT"; break;
+                        default: str = str + "---"; break;
                     }
                 }
             }
@@ -1095,22 +1095,22 @@ std::string Back_translator(unsigned datatype, std::vector<int> seq_data) {
                 if (sites[i] == '1') {
                     number = seq_data[i];
                     switch (number) {
-                        case 00: str = str + "AA"; break;
-                        case 01: str = str + "AC"; break;
-                        case 02: str = str + "AG"; break;
-                        case 03: str = str + "AT"; break;
-                        case 10: str = str + "CA"; break;
-                        case 11: str = str + "CC"; break;
-                        case 12: str = str + "CG"; break;
-                        case 13: str = str + "CT"; break;
-                        case 20: str = str + "GA"; break;
-                        case 21: str = str + "GC"; break;
-                        case 22: str = str + "GG"; break;
-                        case 23: str = str + "GT"; break;
-                        case 30: str = str + "TA"; break;
-                        case 31: str = str + "TC"; break;
-                        case 32: str = str + "TG"; break;
-                        case 33: str = str + "TT"; break;
+                        case  0: str = str + "AA"; break;
+                        case  1: str = str + "AC"; break;
+                        case  2: str = str + "AG"; break;
+                        case  3: str = str + "AT"; break;
+                        case  4: str = str + "CA"; break;
+                        case  5: str = str + "CC"; break;
+                        case  6: str = str + "CG"; break;
+                        case  7: str = str + "CT"; break;
+                        case  8: str = str + "GA"; break;
+                        case  9: str = str + "GC"; break;
+                        case 10: str = str + "GG"; break;
+                        case 11: str = str + "GT"; break;
+                        case 12: str = str + "TA"; break;
+                        case 13: str = str + "TC"; break;
+                        case 14: str = str + "TG"; break;
+                        case 15: str = str + "TT"; break;
                         default: str = str + "--"; break;
                     }
                 }
@@ -1121,22 +1121,22 @@ std::string Back_translator(unsigned datatype, std::vector<int> seq_data) {
                 if (sites[i] == '1') {
                     number = seq_data[i];
                     switch (number) {
-                        case 00: str = str + "AA"; break;
-                        case 01: str = str + "AC"; break;
-                        case 02: str = str + "AG"; break;
-                        case 03: str = str + "AT"; break;
-                        case 10: str = str + "CA"; break;
-                        case 11: str = str + "CC"; break;
-                        case 12: str = str + "CG"; break;
-                        case 13: str = str + "CT"; break;
-                        case 20: str = str + "GA"; break;
-                        case 21: str = str + "GC"; break;
-                        case 22: str = str + "GG"; break;
-                        case 23: str = str + "GT"; break;
-                        case 30: str = str + "TA"; break;
-                        case 31: str = str + "TC"; break;
-                        case 32: str = str + "TG"; break;
-                        case 33: str = str + "TT"; break;
+                        case  0: str = str + "AA"; break;
+                        case  1: str = str + "AC"; break;
+                        case  2: str = str + "AG"; break;
+                        case  3: str = str + "AT"; break;
+                        case  4: str = str + "CA"; break;
+                        case  5: str = str + "CC"; break;
+                        case  6: str = str + "CG"; break;
+                        case  7: str = str + "CT"; break;
+                        case  8: str = str + "GA"; break;
+                        case  9: str = str + "GC"; break;
+                        case 10: str = str + "GG"; break;
+                        case 11: str = str + "GT"; break;
+                        case 12: str = str + "TA"; break;
+                        case 13: str = str + "TC"; break;
+                        case 14: str = str + "TG"; break;
+                        case 15: str = str + "TT"; break;
                         default: str = str + "--"; break;
                     }
                 }
@@ -1147,22 +1147,22 @@ std::string Back_translator(unsigned datatype, std::vector<int> seq_data) {
                 if (sites[i] == '1') {
                     number = seq_data[i];
                     switch (number) {
-                        case 00: str = str + "AA"; break;
-                        case 01: str = str + "AC"; break;
-                        case 02: str = str + "AG"; break;
-                        case 03: str = str + "AT"; break;
-                        case 10: str = str + "CA"; break;
-                        case 11: str = str + "CC"; break;
-                        case 12: str = str + "CG"; break;
-                        case 13: str = str + "CT"; break;
-                        case 20: str = str + "GA"; break;
-                        case 21: str = str + "GC"; break;
-                        case 22: str = str + "GG"; break;
-                        case 23: str = str + "GT"; break;
-                        case 30: str = str + "TA"; break;
-                        case 31: str = str + "TC"; break;
-                        case 32: str = str + "TG"; break;
-                        case 33: str = str + "TT"; break;
+                        case  0: str = str + "AA"; break;
+                        case  1: str = str + "AC"; break;
+                        case  2: str = str + "AG"; break;
+                        case  3: str = str + "AT"; break;
+                        case  4: str = str + "CA"; break;
+                        case  5: str = str + "CC"; break;
+                        case  6: str = str + "CG"; break;
+                        case  7: str = str + "CT"; break;
+                        case  8: str = str + "GA"; break;
+                        case  9: str = str + "GC"; break;
+                        case 10: str = str + "GG"; break;
+                        case 11: str = str + "GT"; break;
+                        case 12: str = str + "TA"; break;
+                        case 13: str = str + "TC"; break;
+                        case 14: str = str + "TG"; break;
+                        case 15: str = str + "TT"; break;
                         default: str = str + "--"; break;
                     }
                 }
@@ -1358,7 +1358,7 @@ unsigned long Read_Input(std::string inname, unsigned datatype){
     infile.open(inname.c_str());
     while (getline(infile, str)) {
         if (!str.empty()) {
-            // remove blank space in string
+            // remove blank space in string called tmp
             tmp.clear();
             for (std::string::size_type i = 0; i != str.size(); ++i) {
                 if (!isblank(str[i])) {
@@ -1425,8 +1425,9 @@ unsigned long Read_Input(std::string inname, unsigned datatype){
 
 
 // Function used to identify variant sites
-void Identify_Variant_Sites(std::string choice_of_sites, unsigned states, unsigned long alignment_length) {
+unsigned long Identify_Variant_Sites(std::string choice_of_sites, unsigned states, unsigned long alignment_length) {
     std::vector<int> column;
+    unsigned long counter(0);
 
     for (std::string::size_type i = 0; i != alignment_length; ++i) {
         sites.push_back('1');
@@ -1445,6 +1446,12 @@ void Identify_Variant_Sites(std::string choice_of_sites, unsigned states, unsign
             column.clear();
         }
     }
+    for (std::string::size_type i = 0; i != alignment_length; ++i) {
+        if (sites[i] == '1') {
+            ++counter;
+        }
+    }
+    return(counter);
 }
 
 
@@ -1459,10 +1466,11 @@ int main(int argc, char** argv){
     double d_obs(0), d_ran(0), lambda(0);
     double min_lambda(std::numeric_limits<double>::max());
     double max_lambda(-std::numeric_limits<double>::max());
+    double mean_lambda(0.0);
     std::vector<int> sequence;
     std::vector<int> column;
     std::vector<double> row_of_double;
-    std::vector<std::vector<double> > mat_dobs, mat_lambda, mat_dB;
+    std::vector<std::vector<double> > mat_dobs, mat_lambda;
     std::string name_1, name_2; // temporary variables holding names of two sequences
     std::string choice_of_sites, nature_of_data, brevity, characters;
     std::string inName, outName1, outName2, outName3, outName4, outName5;
@@ -1586,9 +1594,9 @@ int main(int argc, char** argv){
     if (toupper(brevity[0]) == 'F') {
         std::cout << "\nProcessing data ...\n" << std::endl;
     }
-    Identify_Variant_Sites(choice_of_sites, alphabet, alignment_length);
+    varSites = Identify_Variant_Sites(choice_of_sites, alphabet, alignment_length);
     
-    // Prime square matrices (mat_dobs, mat_lambda, mat_daitFS, and mat_daitMS) with 0.0
+    // Prime square matrices (mat_dobs and mat_lambda with 0.0
     for (std::vector<double>::size_type i = 0; i != taxon.size(); i++) {
         row_of_double.push_back(0.0);
     }
@@ -1596,7 +1604,6 @@ int main(int argc, char** argv){
         mat_dobs.push_back(row_of_double);
     }
     mat_lambda = mat_dobs;
-    mat_dB = mat_dobs;
     if (toupper(brevity[0]) == 'F') {
         outfile1.open(outName1.c_str());
         outfile1 << "Taxon 1,Taxon 2,d_obs,d_ran,lambda" << std::endl;
@@ -1658,6 +1665,7 @@ int main(int argc, char** argv){
             d_ran = 1.0 - d_ran;
             // Calculate the level of saturation (lambda)
             lambda = d_obs/d_ran;
+            mean_lambda = mean_lambda + lambda;
             if (lambda < min_lambda) {
                 min_lambda = lambda;
             }
@@ -1699,7 +1707,7 @@ int main(int argc, char** argv){
             if (toupper(choice_of_sites[0]) == 'V') {
                 outfile5 << ">" << taxon[i] << std::endl;
                 sequence.clear();
-                for (std::vector<std::vector<int> >::size_type j = 0; j != alignment_length; ++j) {
+                for (std::vector<std::vector<int> >::size_type j = 0; j != alignment_length; j++) {
                     sequence.push_back(alignment[i][j]);
                 }
                 characters = Back_translator(dataType, sequence); // A|V sites
@@ -1739,24 +1747,23 @@ int main(int argc, char** argv){
         if (min_lambda == std::numeric_limits<double>::max() || max_lambda == -std::numeric_limits<double>::max()) {
             std::cout << "   Unexpected value of lambda - check alignment" << std::endl;
         } else {
-            std::cout << "   Min(lambda) ............................... " << min_lambda << std::endl;
-            std::cout << "   Max(lambda) ............................... " << max_lambda << std::endl;
-            std::cout << "   Range(lambda) ............................. " << max_lambda - min_lambda << std::endl;
+            std::cout << "   Min(lambda) ............................... " << std::fixed << min_lambda << std::endl;
+            std::cout << "   Max(lambda) ............................... " << std::fixed << max_lambda << std::endl;
+            std::cout << "   Mean(lambda) .............................. " << std::fixed << mean_lambda/total << std::endl;
+            std::cout << "   Range(lambda) ............................. " << std::fixed << max_lambda - min_lambda << std::endl;
         }
         std::cout << "   Sites considered during this analysis ..... ";
         if (toupper(choice_of_sites[0]) == 'V') {
             std::cout << "VARIANT" << std::endl;
+            std::cout << "   Number of variant sites ................... " << std::fixed << varSites << std::endl;
         } else {
             std::cout << "ALL" << std::endl;
+            std::cout << "   Number of sites ........................... " << std::fixed << varSites << std::endl;
         }
         std::cout << "--------------------------------------------------------------------" << std::endl;
         std::cout << std::endl;
     } else {
         std::cout << "File, #taxa, Sites, #sites, Min(lambda), Max(lambda), Pair (max(lambda))" << std::endl;
-        for(std::string::size_type i = 0; i != sites.size(); ++i) {
-            if(sites[i] == '1')
-                ++varSites;;
-        }
         std::cout << inName << "," << taxon.size() << ",";
         if (toupper(choice_of_sites[0]) == 'V') {
             std::cout << "VARIANT,";
